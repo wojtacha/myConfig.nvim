@@ -123,10 +123,11 @@ cmp.setup {
 
   sources = cmp.config.sources {
     { name = "luasnip" },
-    { name = "cody" },
+    -- TODO: include cody or other copilot later on
+    -- { name = "cody" },
     { name = "nvim_lsp" },
     { name = "nvim_lsp_signature_help" },
-    { name = "buffer", max_item_count = 4 },
+    { name = "buffer",                 max_item_count = 4 },
     { name = "path" },
   },
   experimental = {
