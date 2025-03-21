@@ -2,7 +2,15 @@ return {
   {
     "nvim-telescope/telescope.nvim",
     version = "0.1.8",
-    dependencies = { "nvim-lua/plenary.nvim", { "nvim-telescope/telescope-fzf-native.nvim", build = "make" } },
+    dependencies = { "nvim-lua/plenary.nvim",
+      { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
+      {
+        "nvim-telescope/telescope-frecency.nvim",
+        opts = {                -- there's no need to run config now opts do it by itself
+          db_safe_mode = false, -- this somehow removes pretyped A in search
+        }
+      },
+    },
     config = function()
       local actions = require "telescope.actions"
       require("telescope").setup {
@@ -45,18 +53,14 @@ return {
             },
           },
         },
-        pickers = {
+
+        extensions = {
           frecency = {
-            hidden = true,
-            layout_strategy = "center",
-            layout_config = {
-              anchor = "N",
-              width = 0.4,
-              height = 0.6,
-              prompt_position = "top",
-            },
-            previewer = false,
+            db_safe_mode = false,
           },
+        },
+
+        pickers = {
           find_files = {
             hidden = true,
             layout_strategy = "center",
@@ -90,9 +94,5 @@ return {
         },
       }
     end,
-  },
-  {
-    "nvim-telescope/telescope-frecency.nvim",
-    config = function() require("telescope").load_extension "frecency" end,
-  },
+  }
 }

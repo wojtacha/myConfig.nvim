@@ -31,10 +31,11 @@ lspconfig.ts_ls.setup {
 }
 
 -- PYTHON --
+-- deprecated use ruff!! --
 -- Configure `ruff-lsp`.
 -- See: https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#ruff_lsp
 -- For the default config, along with instructions on how to customize the settings
-lspconfig.ruff_lsp.setup {
+lspconfig.ruff.setup {
   init_options = {
     settings = {
       -- Any extra CLI arguments for `ruff` go here.
@@ -113,12 +114,13 @@ lspconfig.html.setup {
 }
 
 lspconfig.yamlls.setup {
+  on_attach = require("kubeschema").on_attach,
   settings = {
     yaml = {
       schemas = {
         ["https://json.schemastore.org/github-workflow.json"] = "/.github/workflows/*",
         ["http://json.schemastore.org/kustomization"] = "kustomization.{yml,yaml}",
-        ---@diagnostic disable-next-line: disable-next-line
+        ---@diagnostic disable-next-line
         ["https://raw.githubusercontent.com/ansible/ansible-lint/main/src/ansiblelint/schemas/ansible.json#/$defs/playbook"] = "*play*.{yml,yaml}",
         ["https://raw.githubusercontent.com/instrumenta/kubernetes-json-schema/master/v1.18.0-standalone-strict/all.json"] = "/*.k8s.yaml",
       },
