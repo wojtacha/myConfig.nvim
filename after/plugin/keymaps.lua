@@ -65,33 +65,42 @@ wk.add {
 }
 local telescope = require "telescope.builtin"
 
-vim.keymap.set("n", "<leader>ff", "<cmd>Telescope frecency workspace=CWD<cr>", { desc = "[F]ind [f]iles" })
+-- vim.keymap.set("n", "<leader>ff", "<cmd>Telescope frecency workspace=CWD<cr>", { desc = "[F]ind [f]iles" })
 
--- vim.keymap.set( "n", "<Leader>ff",
---   function()
---     require("telescope").extensions.frecency.frecency {
---       workspace = "CWD",
---       path_display = { "shorten" },
---       theme = "ivy",
---     }
---   end,
---   { desc = "[F]ind [f]iles" }
--- )
---
+vim.keymap.set("n", "<Leader>ff",
+  function()
+    require("telescope").extensions.frecency.frecency {
+      workspace = "CWD",
+      --@field path_display
+      --| "hidden"
+      --| "tail"
+      --| "absolute"
+      --| "smart"
+      --| "shorten"
+      --| "truncate"
+      path_display = { "smart" },
+      theme = "ivy",
+    }
+  end,
+  { desc = "[F]ind [f]iles" }
+)
+
 vim.keymap.set("n", "<leader>fw", telescope.grep_string, { desc = "[F]ind [w]ord" })
 vim.keymap.set("n", "<leader>fs", telescope.live_grep, { desc = "[F]ile [s]earch - inside live grep" })
 vim.keymap.set("n", "<leader>fb", telescope.buffers, { desc = "[F]ind open [b]uffers" })
 vim.keymap.set("n", "<leader>fh", telescope.help_tags, { desc = "[F]ind [h]elp" })
 vim.keymap.set("n", "<leader><leader>", "<cmd>Telescope commands<cr>", { desc = "Toggle Commands Explorer" })
 
-vim.keymap.set("n", "<leader>e", "<cmd>Explore<cr>", { desc = "Toggle Explorer" })
+-- vim.keymap.set("n", "<leader>e", "<cmd>Explore<cr>", { desc = "Toggle Explorer" })
 vim.keymap.set("n", "<leader>e", "<cmd>Oil<cr>", { desc = "Toggle Explorer" })
+
+vim.keymap.set("n", "<F1>", vim.cmd.NvimTreeToggle, { silent = true, noremap = true })
 vim.keymap.set("n", "<F2>", vim.cmd.UndotreeToggle)
-vim.keymap.set("n", "<F3>", "<cmd>set  list! list?<cr>", { silent = true, noremap = true })
+vim.keymap.set("n", "<F3>", "<cmd>set  list! list?<cr>", { silent = true, noremap = true }) -- show whitespaces
 
 -- Harpoon
 local harpoon = require "harpoon"
-vim.keymap.set({ "n" }, "<C-n>", function() harpoon:list():add() end, { desc = "add harpoon mark", noremap = true })
+vim.keymap.set({ "n" }, "<leader>h", function() harpoon:list():add() end, { desc = "add harpoon mark", noremap = true })
 vim.keymap.set(
   { "n" },
   "<C-e>",
@@ -101,15 +110,13 @@ vim.keymap.set(
 vim.keymap.set({ "n" }, "<C-l>", function() harpoon:list():next() end, { desc = "next Harpoon mark", noremap = false })
 vim.keymap.set({ "n" }, "<C-h>", function() harpoon:list():prev() end, { desc = "next Harpoon mark", noremap = false })
 
-vim.keymap.set("n", "<leader>gg", vim.cmd.Git, { desc = "Toggle git window", noremap = true })
-vim.keymap.set({ "n", "v" }, "<leader>gb", "<cmd>Git branch<cr>", { desc = "Toggle git blame", noremap = true })
+wk.add { "<leader>g", group = "[G]it" }
+vim.keymap.set("n", "<leader>gg", vim.cmd.Git, { desc = "Git menu - tpope", noremap = true })
+vim.keymap.set({ "n", "v" }, "<leader>gb", "<cmd>Git branch<cr>", { desc = "Git [b]ranch", noremap = true })
+vim.keymap.set({ "n", "v" }, "<leader>gl", "<cmd>Gitsigns blame<cr>", { desc = "Git b[L]ame", noremap = true })
+vim.keymap.set({ "n", "v" }, "<leader>gc", "<cmd>Gitsigns preview_hunk<cr>",
+  { desc = "Git show [c]hange", noremap = true })
 
-wk.add {
-  { "<leader>g",  group = "[g]it" },
-  { "<leader>gb", desc = "Git [b]ranch" },
-  { "<leader>gg", desc = "Git [s]tages - tpope" },
-  { "<leader>w",  desc = "[w]indow select" },
-}
 
 vim.keymap.set({ "n", "x" }, "ga", "<cmd>EasyAlign<cr>", { desc = "Easy Align from junegunn", noremap = false })
 wk.add {
@@ -125,14 +132,6 @@ vim.api.nvim_create_autocmd("LspAttach", {
 
     -- Buffer local mappings.
     -- See `:help vim.lsp.*` for documentation on any of the below functions
-    wk.add {
-      { "<leader>g",  group = "[g]it" },
-      { "<leader>gb", desc = "Git [b]lame" },
-      { "<leader>gg", desc = "Git lazy[g]it" },
-      { "<leader>gs", desc = "Git [s]tages - tpope" },
-      { "<leader>w",  desc = "[w]indow select" },
-    }
-
     vim.keymap.set("n", "<leader>lD", vim.lsp.buf.declaration, { buffer = ev.buf, desc = "declaration" })
     vim.keymap.set("n", "<leader>ld", vim.lsp.buf.definition, { buffer = ev.buf, desc = "definition" })
     vim.keymap.set("n", "<leader>lr", vim.lsp.buf.references, { buffer = ev.buf, desc = "references" })

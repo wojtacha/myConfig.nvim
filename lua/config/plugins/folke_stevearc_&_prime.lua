@@ -1,5 +1,5 @@
 return {
-  { "folke/neoconf.nvim", cmd = "Neoconf" },
+  { "folke/neoconf.nvim",          cmd = "Neoconf" },
 
   {
     "folke/neodev.nvim",
@@ -22,16 +22,26 @@ return {
     end,
   },
 
-  { "norcalli/nvim-colorizer.lua", event = "VeryLazy" }, -- shows colors in code which is cool!
+  { "norcalli/nvim-colorizer.lua", event = "VeryLazy" },                                         -- shows colors in code which is cool!
 
-  { "tpope/vim-surround" }, -- ale wierze w papieża
+  { "tpope/vim-surround" },                                                                      -- ale wierze w papieża
 
-  { "windwp/nvim-autopairs", config = function() require("nvim-autopairs").setup {} end }, -- when you press "{" sign "}" appears automagically
+  { "windwp/nvim-autopairs",       config = function() require("nvim-autopairs").setup {} end }, -- when you press "{" sign "}" appears automagically
 
-  { "mbbill/undotree", event = "VeryLazy" },
+  { "mbbill/undotree",             event = "VeryLazy" },
 
-  { "vimwiki/vimwiki", event = "VeryLazy" }, -- good plugin for notes cheatsheet diary todo
-
+  { "vimwiki/vimwiki",             event = "VeryLazy" }, -- good plugin for notes cheatsheet diary todo
+  {
+    "nvim-tree/nvim-tree.lua",
+    version = "*",
+    lazy = false,
+    dependencies = {
+      "nvim-tree/nvim-web-devicons",
+    },
+    config = function()
+      require("nvim-tree").setup {}
+    end,
+  },
   {
     "stevearc/oil.nvim",
     opts = {},

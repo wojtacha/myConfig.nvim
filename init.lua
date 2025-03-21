@@ -23,6 +23,8 @@ vim.api.nvim_create_autocmd("TextYankPost", {
   callback = function() vim.highlight.on_yank() end,
 })
 
+-- vim.api.nvim_create_user_command('Q', { })
+
 require("lazy").setup("config.plugins", {
   change_detection = {
     -- automatically check for config file changes and reload the ui

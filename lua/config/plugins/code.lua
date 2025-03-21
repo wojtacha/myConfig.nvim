@@ -37,6 +37,10 @@ return {
       { "rafamadriz/friendly-snippets" }, -- Optional
     },
   },
+  {
+    "imroc/kubeschema.nvim",
+    opts = {},
+  },
 
   {
     "ray-x/lsp_signature.nvim", -- Show function signature when you type
@@ -102,7 +106,9 @@ return {
         -- typescript = { "biome", stop_after_first = true },
         typescript = { "prettierd", "prettier", stop_after_first = true },
         javascript = { "prettierd", "prettier", stop_after_first = true },
+        terraform = { "tofu_fmt" },
         yaml = { "yamlfmt" },
+
       },
       -- Set default options
       default_format_opts = {
@@ -121,58 +127,5 @@ return {
       -- If you want the formatexpr, here is the place to set it
       vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
     end,
-  },
-
-  {
-    "sourcegraph/sg.nvim",
-    dependencies = { "nvim-lua/plenary.nvim", "nvim-telescope/telescope.nvim" },
-    config = function() require("sg").setup {} end,
-  },
-
-  {
-    "nomnivore/ollama.nvim",
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-    },
-    -- All the user commands added by the plugin
-    cmd = { "Ollama", "OllamaModel", "OllamaServe", "OllamaServeStop" },
-    keys = {
-      -- Sample keybind for prompt menu. Note that the <c-u> is important for selections to work properly.
-      {
-        "<leader>oo",
-        function() require("ollama").prompt() end,
-        desc = "ollama prompt",
-        mode = { "n", "v" },
-      },
-      -- Sample keybind for direct prompting. Note that the <c-u> is important for selections to work properly.
-      {
-        "<leader>oG",
-        function() require("ollama").prompt "Generate_Code" end,
-        desc = "ollama Generate Code",
-        mode = { "n", "v" },
-      },
-    },
-
-    ---@type Ollama.Config
-    opts = {
-      model = "mistral",
-      url = "http://127.0.0.1:11434",
-      -- prompts = require "ollama.prompts",
-      serve = {
-        on_start = false,
-        command = "ollama",
-        args = { "serve" },
-        stop_command = "pkill",
-        stop_args = { "-SIGTERM", "ollama" },
-      },
-    },
-    prompts = {
-      Sample_Prompt = {
-        prompt = "This is a sample prompt that receives $input and $sel(ection), among others.",
-        input_label = "> ",
-        model = "mistral",
-        action = "display",
-      },
-    },
   },
 }
