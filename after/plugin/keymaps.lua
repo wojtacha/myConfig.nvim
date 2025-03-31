@@ -47,14 +47,15 @@ vim.keymap.set(
   "<cmd>lua vim.diagnostic.open_float()<CR>",
   { desc = "[d]iagnostic [i]nformation", noremap = true, silent = true }
 )
--- vim.keymap.set("n", "<leader>do", vim.diagnostic.open_float)
+
+vim.keymap.set("n", "<leader>do", vim.diagnostic.open_float, { desc = "[d]iagnostic [o]pen" })
 vim.keymap.set("n", "<leader>dl", vim.diagnostic.setloclist, { desc = "[d]iagnostic [l]ist" })
 vim.keymap.set("n", "<leader>dh", vim.diagnostic.hide, { desc = "[d]iagnostic [h]ide" })
 vim.keymap.set("n", "<leader>dn", vim.diagnostic.goto_next, { desc = "[d]iagnostic [n]ext" })
 vim.keymap.set("n", "<leader>dp", vim.diagnostic.goto_prev, { desc = "[d]iagnostic [p]rev" })
 
 -- DEFAULTS END --
---
+
 
 wk.add {
   { "<leader>f",  group = "find" },
@@ -64,8 +65,6 @@ wk.add {
   { "<leader>fs", desc = "[F]ile [s]earch - inside live grep" },
 }
 local telescope = require "telescope.builtin"
-
--- vim.keymap.set("n", "<leader>ff", "<cmd>Telescope frecency workspace=CWD<cr>", { desc = "[F]ind [f]iles" })
 
 vim.keymap.set("n", "<Leader>ff",
   function()
@@ -91,7 +90,6 @@ vim.keymap.set("n", "<leader>fb", telescope.buffers, { desc = "[F]ind open [b]uf
 vim.keymap.set("n", "<leader>fh", telescope.help_tags, { desc = "[F]ind [h]elp" })
 vim.keymap.set("n", "<leader><leader>", "<cmd>Telescope commands<cr>", { desc = "Toggle Commands Explorer" })
 
--- vim.keymap.set("n", "<leader>e", "<cmd>Explore<cr>", { desc = "Toggle Explorer" })
 vim.keymap.set("n", "<leader>e", "<cmd>Oil<cr>", { desc = "Toggle Explorer" })
 
 vim.keymap.set("n", "<F1>", vim.cmd.NvimTreeToggle, { silent = true, noremap = true })
