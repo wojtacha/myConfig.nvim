@@ -1,50 +1,99 @@
-local lsp = require "lsp-zero"
-local lsp_zero_preset = lsp.preset {}
+local lsp = require("lsp-zero")
+local lsp_zero_preset = lsp.preset({})
 
-lsp.on_attach(function(_, bufnr) lsp.default_keymaps { buffer = bufnr } end)
+lsp.on_attach(function(_, bufnr) lsp.default_keymaps({ buffer = bufnr }) end)
 
 -- (Optional) Configure lua language server for neovim
-require("mason-lspconfig").setup {
+require("mason-lspconfig").setup({
   ensure_installed = { "lua_ls" },
-}
+})
 
-local lspconfig = require "lspconfig"
+local lspconfig = require("lspconfig")
 local vim_capabilities = vim.lsp.protocol.make_client_capabilities()
-local cmp_capabilities = require("cmp_nvim_lsp").default_capabilities()
-lsp.skip_server_setup { "jdtls", "ruby_ls" }
+vim_capabilities.textDocument.completion.completionItem.snippetSupport = true
 
-lspconfig.terraformls.setup {}
+local cmp_capabilities = require("cmp_nvim_lsp").default_capabilities()
+
+lsp.skip_server_setup({ "jdtls", "ruby_ls" })
+
+lspconfig.terraformls.setup({})
 
 lspconfig.lua_ls.setup(lsp_zero_preset.nvim_lua_ls())
 
-lspconfig.sourcekit.setup {
+lspconfig.sourcekit.setup({
   cmd = { "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/sourcekit-lsp" },
   single_file_support = true,
-}
+})
 
-lspconfig.ts_ls.setup {
+lspconfig.ts_ls.setup({
   settings = {
     completions = {
       completeFunctionCalls = true,
     },
   },
-}
+})
+
+-- GO ---
+local on_attach = function(client, bufnr)
+  local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
+  buf_set_option("omnifunc", "v:lua.vim.lsp.omnifunc")
+  require("inlay-hints").on_attach(client, bufnr)
+
+  require("lsp_signature").on_attach({
+    bind = true,
+    handler_opts = {
+      border = "rounded",
+    },
+  }, bufnr)
+end
+
+lspconfig.gopls.setup({
+  cmd = { "gopls" },
+  -- for postfix snippets and analyzers
+  filetypes = { "go", "gomod", "gowork", "gotmpl" },
+  single_file_support = true,
+  capabilities = vim_capabilities,
+  settings = {
+    gopls = {
+      experimentalPostfixCompletions = true,
+      analyses = {
+        unusedparams = true,
+        unusedvariable = true,
+        unusedwrite = true,
+        shadow = true,
+      },
+      hints = {
+        assignVariableTypes = true,
+        compositeLiteralFields = true,
+        compositeLiteralTypes = true,
+        constantValues = true,
+
+        functionTypeParameters = true,
+        parameterNames = true,
+        rangeVariableTypes = true,
+      },
+      gofumpt = true,
+      staticcheck = true,
+    },
+  },
+  on_attach = on_attach,
+})
 
 -- PYTHON --
 -- deprecated use ruff!! --
 -- Configure `ruff-lsp`.
 -- See: https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#ruff_lsp
 -- For the default config, along with instructions on how to customize the settings
-lspconfig.ruff.setup {
+lspconfig.ruff.setup({
   init_options = {
     settings = {
       -- Any extra CLI arguments for `ruff` go here.
       args = {},
     },
   },
-}
+})
 
-lspconfig.pylsp.setup {
+lspconfig.pylsp.setup({
   capabilities = vim_capabilities,
   settings = {
     pylsp = {
@@ -57,9 +106,9 @@ lspconfig.pylsp.setup {
       },
     },
   },
-}
+})
 
-lspconfig.jedi_language_server.setup {
+lspconfig.jedi_language_server.setup({
   capabilities = cmp_capabilities,
   init_options = {
     codeAction = {
@@ -105,15 +154,13 @@ lspconfig.jedi_language_server.setup {
       },
     },
   },
-}
+})
 
-vim_capabilities.textDocument.completion.completionItem.snippetSupport = true
-
-lspconfig.html.setup {
+lspconfig.html.setup({
   capabilities = vim_capabilities,
-}
+})
 
-lspconfig.yamlls.setup {
+lspconfig.yamlls.setup({
   on_attach = require("kubeschema").on_attach,
   settings = {
     yaml = {
@@ -152,6 +199,6 @@ lspconfig.yamlls.setup {
       },
     },
   },
-}
+})
 
 lsp.setup()

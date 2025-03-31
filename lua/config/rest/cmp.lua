@@ -1,7 +1,3 @@
-local cmp_action = require("lsp-zero").cmp_action()
--- selene: allow(unused_variable)
----@diagnostic disable-next-line
-local cmp_format = require("lsp-zero").cmp_format()
 require("luasnip.loaders.from_vscode").lazy_load()
 local cmp = require "cmp"
 
@@ -86,8 +82,6 @@ cmp.setup {
         fallback() -- If you use vim-endwise, this fallback will behave the same as vim-endwise.
       end
     end,
-    ["<C-j>"] = cmp_action.luasnip_jump_forward(),
-    ["<C-k>"] = cmp_action.luasnip_jump_backward(),
   },
   sorting = {
     priority_weight = 1,
