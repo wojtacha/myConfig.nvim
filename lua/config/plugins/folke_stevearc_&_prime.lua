@@ -1,9 +1,16 @@
 return {
-  { "folke/neoconf.nvim",          cmd = "Neoconf" },
+  { "folke/neoconf.nvim", cmd = "Neoconf" },
 
   {
-    "folke/neodev.nvim",
-    config = function() require("neodev").setup {} end,
+    "folke/lazydev.nvim",
+    ft = "lua", -- only load on lua files
+    opts = {
+      library = {
+        -- See the configuration section for more details
+        -- Load luvit types when the `vim.uv` word is found
+        { path = "${3rd}/luv/library", words = { "vim%.uv" } },
+      },
+    },
   },
 
   {
@@ -12,25 +19,23 @@ return {
     branch = "harpoon2",
     dependencies = { "nvim-lua/plenary.nvim" },
     config = function()
-      local harpoon = require "harpoon"
-      harpoon:setup {
+      local harpoon = require("harpoon")
+      harpoon:setup({
         settings = {
           save_on_toggle = true,
           sync_on_ui_close = true,
         },
-      }
+      })
     end,
   },
 
-  { "norcalli/nvim-colorizer.lua", event = "VeryLazy" },                                         -- shows colors in code which is cool!
+  { "norcalli/nvim-colorizer.lua", event = "VeryLazy" }, -- shows colors in code which is cool!
 
-  { "tpope/vim-surround" },                                                                      -- ale wierze w papieża
+  { "tpope/vim-surround" }, -- ale wierze w papieża
 
-  { "windwp/nvim-autopairs",       config = function() require("nvim-autopairs").setup {} end }, -- when you press "{" sign "}" appears automagically
+  { "mbbill/undotree", event = "VeryLazy" },
 
-  { "mbbill/undotree",             event = "VeryLazy" },
-
-  { "vimwiki/vimwiki",             event = "VeryLazy" }, -- good plugin for notes cheatsheet diary todo
+  { "vimwiki/vimwiki", event = "VeryLazy" }, -- good plugin for notes cheatsheet diary todo
   {
     "nvim-tree/nvim-tree.lua",
     version = "*",
@@ -38,16 +43,14 @@ return {
     dependencies = {
       "nvim-tree/nvim-web-devicons",
     },
-    config = function()
-      require("nvim-tree").setup {}
-    end,
+    config = function() require("nvim-tree").setup({}) end,
   },
   {
     "stevearc/oil.nvim",
     opts = {},
     dependencies = { "nvim-tree/nvim-web-devicons" },
     config = function()
-      require("oil").setup {
+      require("oil").setup({
         default_file_explorer = true,
         -- Id is automatically added at the beginning, and name at the end
         -- See :help oil-columns
@@ -76,9 +79,10 @@ return {
           ["H"] = "actions.toggle_hidden",
           ["g\\"] = "actions.toggle_trash",
         },
-      }
+      })
     end,
   },
+
   {
     "iamcco/markdown-preview.nvim",
     build = "cd app && npm install",
