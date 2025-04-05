@@ -13,6 +13,9 @@ return {
       -- Useful status updates for LSP.
       { "j-hui/fidget.nvim", opts = {} },
 
+      -- Provides on attach function to yamlls server
+      { "imroc/kubeschema.nvim", opts = {} },
+
       -- Allows extra capabilities provided by nvim-cmp
       "hrsh7th/cmp-nvim-lsp",
     },
@@ -196,7 +199,6 @@ return {
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
         -- clangd = {},
-        -- pyright = {},
         -- rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
@@ -205,7 +207,80 @@ return {
         --
         -- But for many setups, the LSP (`ts_ls`) will work just fine
         -- ts_ls = {},
+
+        -- TODO: to nie dziala trzeba poza tym innym masonem wjebac
+        -- gh_actions_ls = {
+        --   cmd = { "gh-actions-language-server", "--stdio" },
+        --   filetypes = { "yaml" },
+        --   -- Only attach to yaml files that are GitHub workflows instead of all yaml
+        --   -- files. (A nil root_dir and no single_file_support results in the LSP not
+        --   -- attaching.) For details, see #3558
+        --   root_dir = function(filename)
+        --     local dirs_to_check = {
+        --       ".github/workflows",
+        --       ".forgejo/workflows",
+        --       ".gitea/workflows",
+        --     }
         --
+        --     local dir = vim.fs.dirname(filename)
+        --     for _, subdir in ipairs(dirs_to_check) do
+        --       local match = vim.fs.find(subdir, { path = dir, upward = true })[1]
+        --       if match and vim.fn.isdirectory(match) == 1 and vim.fs.dirname(filename) == match then return match end
+        --     end
+        --
+        --     return nil
+        --   end,
+        --   -- Disabling "single file support" is a hack to avoid enabling this LS for
+        --   -- every random yaml file, so `root_dir()` can control the enablement.
+        --   single_file_support = false,
+        --   capabilities = {
+        --     workspace = {
+        --       didChangeWorkspaceFolders = {
+        --         dynamicRegistration = true,
+        --       },
+        --     },
+        --   },
+        -- },
+
+        yamlls = {
+          on_attach = require("kubeschema").on_attach,
+          settings = {
+            yaml = {
+              schemas = {
+                ["https://json.schemastore.org/github-workflow.json"] = "/.github/workflows/*",
+                ["http://json.schemastore.org/kustomization"] = "kustomization.{yml,yaml}",
+                ---@diagnostic disable-next-line
+                ["https://raw.githubusercontent.com/ansible/ansible-lint/main/src/ansiblelint/schemas/ansible.json#/$defs/playbook"] = "*play*.{yml,yaml}",
+                ["https://raw.githubusercontent.com/instrumenta/kubernetes-json-schema/master/v1.18.0-standalone-strict/all.json"] = "/*.k8s.yaml",
+              },
+              format = {
+                enable = true,
+              },
+              hover = true,
+              completion = true,
+              customTags = {
+                "!fn",
+                "!And",
+                "!If",
+                "!Not",
+                "!Equals",
+                "!Or",
+                "!FindInMap sequence",
+                "!Base64",
+                "!Cidr",
+                "!Ref",
+                "!Ref Scalar",
+                "!Sub",
+                "!GetAtt",
+                "!GetAZs",
+                "!ImportValue",
+                "!Select",
+                "!Split",
+                "!Join sequence",
+              },
+            },
+          },
+        },
 
         gopls = {
           cmd = { "gopls" },
@@ -240,7 +315,6 @@ return {
         lua_ls = {
           -- cmd = { ... },
           -- filetypes = { ... },
-
           on_init = function(client)
             if client.workspace_folders then
               local path = client.workspace_folders[1].name
@@ -278,6 +352,9 @@ return {
             },
           },
         },
+
+        ruff = {},
+        pyright = {},
       }
 
       -- Ensure the servers and tools above are installed
@@ -297,6 +374,7 @@ return {
       vim.list_extend(ensure_installed, {
         "stylua", -- Used to format Lua code
       })
+
       require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
 
       require("mason-lspconfig").setup({
@@ -429,52 +507,8 @@ return {
   --   capabilities = vim_capabilities,
   -- }
   --
-  -- lspconfig.yamlls.setup {
-  --   on_attach = require("kubeschema").on_attach,
-  --   settings = {
-  --     yaml = {
-  --       schemas = {
-  --         ["https://json.schemastore.org/github-workflow.json"] = "/.github/workflows/*",
-  --         ["http://json.schemastore.org/kustomization"] = "kustomization.{yml,yaml}",
-  --         ---@diagnostic disable-next-line
-  --         ["https://raw.githubusercontent.com/ansible/ansible-lint/main/src/ansiblelint/schemas/ansible.json#/$defs/playbook"] = "*play*.{yml,yaml}",
-  --         ["https://raw.githubusercontent.com/instrumenta/kubernetes-json-schema/master/v1.18.0-standalone-strict/all.json"] = "/*.k8s.yaml",
-  --       },
-  --       format = {
-  --         enable = true,
-  --       },
-  --       hover = true,
-  --       completion = true,
-  --
-  --       customTags = {
-  --         "!fn",
-  --         "!And",
-  --         "!If",
-  --         "!Not",
-  --         "!Equals",
-  --         "!Or",
-  --         "!FindInMap sequence",
-  --         "!Base64",
-  --         "!Cidr",
-  --         "!Ref",
-  --         "!Ref Scalar",
-  --         "!Sub",
-  --         "!GetAtt",
-  --         "!GetAZs",
-  --         "!ImportValue",
-  --         "!Select",
-  --         "!Split",
-  --         "!Join sequence",
-  --       },
-  --     },
-  --   },
-  -- }
   -- TODO:  check if cmp needs to be there  and remove lsp zero
 
-  --     {
-  --       "neovim/nvim-lspconfig",
-  --       -- opts = { inlay_hints = true }
-  --     }, -- Required
   --
   --     {  -- Optional
   --       "williamboman/mason.nvim",
@@ -491,8 +525,6 @@ return {
   --         }
   --       end,
   --     },
-  --     { "williamboman/mason-lspconfig.nvim" }, -- Optional
-  --     -- Autocompletion
   --     { "hrsh7th/nvim-cmp" },
   --     -- Required
   --     { "hrsh7th/cmp-nvim-lsp" },         -- Required
@@ -505,6 +537,7 @@ return {
   --     { "rafamadriz/friendly-snippets" }, -- Optional
   --   },
   -- },
+
   {
     "imroc/kubeschema.nvim",
     opts = {},
@@ -534,6 +567,7 @@ return {
         yaml = { "actionlint", "ansible_lint" },
         lua = { "selene" },
         ruby = { "rubocop" },
+        python = { "ruff" },
       }
 
       local linter_set = {}
