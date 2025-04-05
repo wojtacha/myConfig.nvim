@@ -1,8 +1,4 @@
 return {
-  {
-    "imroc/kubeschema.nvim",
-    opts = {},
-  },
 
   {
     "ray-x/lsp_signature.nvim", -- Show function signature when you type
@@ -12,7 +8,7 @@ return {
     "mfussenegger/nvim-lint",
     event = { "BufReadPre", "BufNewFile" },
     config = function()
-      local linter = require "lint"
+      local linter = require("lint")
 
       local default_linter_set = {
         yaml = { "actionlint", "ansible_lint" },
@@ -25,9 +21,7 @@ return {
       for ft, linters in pairs(default_linter_set) do
         linter_set[ft] = {} -- Initialize a table for each filetype
         for _, lntr in ipairs(linters) do
-          if vim.fn.executable(lntr) == 1 then
-            table.insert(linter_set[ft], lntr)
-          end
+          if vim.fn.executable(lntr) == 1 then table.insert(linter_set[ft], lntr) end
         end
       end
 
@@ -47,8 +41,7 @@ return {
     "stevearc/conform.nvim",
     event = { "BufWritePre" },
     cmd = { "ConformInfo" },
-    keys = {
-    },
+    keys = {},
     -- This will provide type hinting with LuaLS
     ---@module "conform"
     ---@type conform.setupOpts
@@ -56,19 +49,10 @@ return {
       -- Define your formatters
       formatters_by_ft = {
         lua = { "stylua" },
-        python = function(bufnr)
-          if require("conform").get_formatter_info("ruff_format", bufnr).available then
-            return { "ruff_format" }
-          else
-            return { "isort", "black" }
-          end
-        end,
-        -- typescript = { "biome", stop_after_first = true },
         typescript = { "prettierd", "prettier", stop_after_first = true },
         javascript = { "prettierd", "prettier", stop_after_first = true },
         terraform = { "tofu_fmt" },
         yaml = { "yamlfmt" },
-
       },
       -- Set default options
       default_format_opts = {

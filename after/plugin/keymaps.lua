@@ -71,13 +71,14 @@ end, { desc = "[F]ind [f]iles" })
 
 vim.keymap.set("n", "<leader>fw", telescope.grep_string, { desc = "[F]ind [w]ord" })
 vim.keymap.set("n", "<leader>fs", telescope.live_grep, { desc = "[F]ile [s]earch - inside live grep" })
+vim.keymap.set("n", "<leader>fo", function() telescope.grep_string({ search = vim.fn.expand("<cword>") }) end, { desc = "[F]ile [s]earch - inside live grep" })
 vim.keymap.set("n", "<leader>fb", telescope.buffers, { desc = "[F]ind open [b]uffers" })
 vim.keymap.set("n", "<leader>fh", telescope.help_tags, { desc = "[F]ind [h]elp" })
 vim.keymap.set("n", "<leader><leader>", "<cmd>Telescope commands<cr>", { desc = "Toggle Commands Explorer" })
 
 vim.keymap.set("n", "<leader>e", "<cmd>Oil<cr>", { desc = "Toggle Explorer" })
 
-vim.keymap.set("n", "<F1>", vim.cmd.NvimTreeToggle, { silent = true, noremap = true })
+vim.keymap.set("n", "<F1>", vim.cmd.NvimTreeFindFile, { silent = true, noremap = true })
 vim.keymap.set("n", "<F2>", vim.cmd.UndotreeToggle)
 vim.keymap.set("n", "<F3>", "<cmd>set  list! list?<cr>", { silent = true, noremap = true }) -- show whitespaces
 

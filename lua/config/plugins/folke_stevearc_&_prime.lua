@@ -31,9 +31,68 @@ return {
 
   { "norcalli/nvim-colorizer.lua", event = "VeryLazy" }, -- shows colors in code which is cool!
 
-  { "tpope/vim-surround" }, -- ale wierze w papieża
-
   { "mbbill/undotree", event = "VeryLazy" },
+
+  { -- Collection of various small independent plugins/modules
+    "echasnovski/mini.nvim",
+    config = function()
+      -- Better Around/Inside textobjects
+      --
+      -- Examples:
+      --  - va)  - [V]isually select [A]round [)]paren
+      --  - yinq - [Y]ank [I]nside [N]ext [Q]uote
+      --  - ci'  - [C]hange [I]nside [']quote
+      require("mini.ai").setup({ n_lines = 500 })
+
+      -- Add/delete/replace surroundings (brackets, quotes, etc.)
+      --
+      -- - saiw) - [S]urround [A]dd [I]nner [W]ord [)]Paren
+      -- - sd'   - [S]urround [D]elete [']quotes
+      -- - sr)'  - [S]urround [R]eplace [)] [']
+      require("mini.surround").setup()
+
+      -- Simple and easy statusline.
+      --  You could remove this setup call if you don't like it,
+      --  and try some other statusline plugin
+      --   local statusline = require("mini.statusline")
+      --   -- set use_icons to true if you have a Nerd Font
+      --   statusline.setup({
+      --     use_icons = true,
+      --
+      --     content = {
+      --       active = function()
+      --         local mode, mode_hl = MiniStatusline.section_mode({ trunc_width = 120 })
+      --         local diagnostics = MiniStatusline.section_diagnostics({ trunc_width = 75 })
+      --         local lsp = MiniStatusline.section_lsp({ trunc_width = 75 })
+      --         local filename = MiniStatusline.section_filename({ trunc_width = 140 })
+      --         local location = MiniStatusline.section_location({ trunc_width = 75 })
+      --         local search = MiniStatusline.section_searchcount({ trunc_width = 75 })
+      --         -- H.use_icons = nil
+      --
+      --         -- Usage of `MiniStatusline.combine_groups()` ensures highlighting and
+      --         -- correct padding with spaces between groups (accounts for 'missing'
+      --         -- sections, etc.)
+      --         return MiniStatusline.combine_groups({
+      --           { hl = mode_hl, strings = { mode } },
+      --           "%<", -- Mark general truncate point
+      --           { hl = "MiniStatuslineFilename", strings = { filename } },
+      --           "%=", -- End left alignment
+      --           { hl = mode_hl, strings = { diagnostics, lsp, search, location } },
+      --         })
+      --       end,
+      --     },
+      --   })
+      --
+      --   -- You can configure sections in the statusline by overriding their
+      --   -- default behavior. For example, here we set the section for
+      --   -- cursor location to LINE:COLUMN
+      --   ---@diagnostic disable-next-line: duplicate-set-field
+      --   statusline.section_location = function() return "%2l:%-2v" end
+      --
+      --   -- ... and there is more!
+      --   --  Check out: https://github.com/echasnovski/mini.nvim
+    end,
+  },
 
   { "vimwiki/vimwiki", event = "VeryLazy" }, -- good plugin for notes cheatsheet diary todo
   {
@@ -43,7 +102,22 @@ return {
     dependencies = {
       "nvim-tree/nvim-web-devicons",
     },
-    config = function() require("nvim-tree").setup({}) end,
+    config = function()
+      local function my_on_attach(bufnr)
+        local api = require("nvim-tree.api")
+
+        local function opts(desc) return { desc = "nvim-tree: " .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true } end
+
+        -- default mappings
+        api.config.mappings.default_on_attach(bufnr)
+        -- custom mappings
+
+        vim.keymap.del("n", "<C-e>", { buffer = bufnr })
+        vim.keymap.set("n", "?", api.tree.toggle_help, opts("Help"))
+      end
+
+      require("nvim-tree").setup({ on_attach = my_on_attach })
+    end,
   },
   {
     "stevearc/oil.nvim",
