@@ -5,6 +5,38 @@ return {
     event = "VeryLazy",
   },
   {
+    "olimorris/codecompanion.nvim",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "nvim-treesitter/nvim-treesitter",
+    },
+    opts = {
+      strategies = {
+        -- Change the default chat adapter
+        chat = {
+          adapter = "openai",
+        },
+      },
+      opts = {
+        -- Set debug logging
+        log_level = "DEBUG",
+      },
+    },
+    config = function()
+      require("codecompanion").setup({
+        adapters = {
+          openai = function()
+            return require("codecompanion.adapters").extend("openai", {
+              env = {
+                api_key = "",
+              },
+            })
+          end,
+        },
+      })
+    end,
+  },
+  {
     "mfussenegger/nvim-lint",
     event = { "BufReadPre", "BufNewFile" },
     config = function()
