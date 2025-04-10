@@ -116,7 +116,9 @@ return {
         vim.keymap.set("n", "?", api.tree.toggle_help, opts("Help"))
       end
 
-      require("nvim-tree").setup({ on_attach = my_on_attach })
+      require("nvim-tree").setup({ on_attach = my_on_attach, filters = {
+        git_ignored = false,
+      } })
     end,
   },
   {

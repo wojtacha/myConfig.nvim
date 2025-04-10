@@ -601,7 +601,6 @@ return {
       })
     end,
   },
-
   {
     "stevearc/conform.nvim",
     event = { "BufWritePre" },
@@ -613,19 +612,19 @@ return {
     opts = {
       -- Define your formatters
       formatters_by_ft = {
+        -- python = function(bufnr)
+        --   if require("conform").get_formatter_info("ruff_format", bufnr).available then
+        --     return { "ruff_format" }
+        --   else
+        --     return { "isort", "black" }
+        --   end
+        -- end,
         lua = { "stylua" },
-        python = function(bufnr)
-          if require("conform").get_formatter_info("ruff_format", bufnr).available then
-            return { "ruff_format" }
-          else
-            return { "isort", "black" }
-          end
-        end,
-        -- typescript = { "biome", stop_after_first = true },
         typescript = { "prettierd", "prettier", stop_after_first = true },
         javascript = { "prettierd", "prettier", stop_after_first = true },
         terraform = { "tofu_fmt" },
         yaml = { "yamlfmt" },
+        json = { "fixjson" },
       },
       -- Set default options
       default_format_opts = {
