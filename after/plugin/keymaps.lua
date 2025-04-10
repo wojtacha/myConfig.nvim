@@ -91,7 +91,15 @@ vim.keymap.set({ "n" }, "<C-h>", function() harpoon:list():prev() end, { desc = 
 
 wk.add({ "<leader>g", group = "[G]it" })
 vim.keymap.set("n", "<leader>gg", vim.cmd.Git, { desc = "Git menu - tpope", noremap = true })
-vim.keymap.set({ "n", "v" }, "<leader>gb", "<cmd>Git branch<cr>", { desc = "Git [b]ranch", noremap = true })
+vim.keymap.set({ "n", "v" }, "<leader>gb", function()
+  telescope.git_branches(require("telescope.themes").get_dropdown({
+    layout_config = {
+      preview_cutoff = 0, -- Preview should always show (unless previewer = false)
+      width = 120,
+      height = function(_, _, max_lines) return math.min(max_lines, 15) end,
+    },
+  }))
+end, { desc = "Git [b]ranch", noremap = true })
 vim.keymap.set({ "n", "v" }, "<leader>gl", "<cmd>Gitsigns blame<cr>", { desc = "Git b[L]ame", noremap = true })
 vim.keymap.set({ "n", "v" }, "<leader>gc", "<cmd>Gitsigns preview_hunk<cr>", { desc = "Git show [c]hange", noremap = true })
 
