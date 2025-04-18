@@ -2,6 +2,24 @@ return {
   {
     "nvim-lualine/lualine.nvim",
   },
+  {
+    "yorickpeterse/nvim-window",
+    config = function()
+      require("nvim-window").setup({
+        chars = {
+          "a",
+          "s",
+          "d",
+          "f",
+          "g",
+          "h",
+          "j",
+          "k",
+          "l",
+        },
+      })
+    end,
+  },
 
   { -- Useful plugin to show you pending keybinds.
     "folke/which-key.nvim",

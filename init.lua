@@ -1,16 +1,15 @@
-require "options"
+require("options")
 
-
-local lazypath = vim.fn.stdpath "data" .. "/lazy/lazy.nvim"
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
-  vim.fn.system {
+  vim.fn.system({
     "git",
     "clone",
     "--filter=blob:none",
     "https://github.com/folke/lazy.nvim.git",
     "--branch=stable", -- latest stable release
     lazypath,
-  }
+  })
 end
 
 vim.opt.rtp:prepend(lazypath)
@@ -24,7 +23,18 @@ vim.api.nvim_create_autocmd("TextYankPost", {
   callback = function() vim.highlight.on_yank() end,
 })
 
--- vim.api.nvim_create_user_command('Q', { })
+vim.api.nvim_create_user_command("Git", function(opts)
+  if opts.fargs[1] == "push" then
+    vim.cmd("Git -p push")
+  else
+    vim.cmd("Git " .. table.concat(opts.fargs, " "))
+  end
+end, {})
+
+vim.api.nvim_create_autocmd("User", {
+  pattern = "VeryLazy",
+  callback = function() require("config.keymaps") end,
+})
 
 require("lazy").setup("config.plugins", {
   change_detection = {

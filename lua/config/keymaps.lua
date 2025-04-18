@@ -26,6 +26,7 @@ vim.keymap.set("x", "p", [["_dP]], { desc = "another paste command send char to 
 -- quickfix window mappings
 vim.keymap.set("n", "<C-j>", "<cmd>cn<cr>", { desc = "qf next" })
 vim.keymap.set("n", "<C-k>", "<cmd>cp<cr>", { desc = "qf prev" })
+vim.keymap.set({ "n", "v" }, "<leader>w", function() require("nvim-window").pick() end, { desc = "Pick [w]indow", noremap = true })
 
 -- See `:help vim.diagnostic.*` for documentation on any of the below functions
 wk.add({
@@ -87,6 +88,7 @@ local harpoon = require("harpoon")
 vim.keymap.set({ "n" }, "<leader>h", function() harpoon:list():add() end, { desc = "add harpoon mark", noremap = true })
 vim.keymap.set({ "n" }, "<C-e>", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end, { desc = "Toggle harpoon menu", noremap = true })
 vim.keymap.set({ "n" }, "<C-l>", function() harpoon:list():next() end, { desc = "next Harpoon mark", noremap = false })
+
 vim.keymap.set({ "n" }, "<C-h>", function() harpoon:list():prev() end, { desc = "next Harpoon mark", noremap = false })
 
 wk.add({ "<leader>g", group = "[G]it" })
