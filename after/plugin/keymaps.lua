@@ -45,34 +45,20 @@ vim.keymap.set("n", "<leader>dn", vim.diagnostic.goto_next, { desc = "[d]iagnost
 vim.keymap.set("n", "<leader>dp", vim.diagnostic.goto_prev, { desc = "[d]iagnostic [p]rev" })
 
 -- DEFAULTS END --
+wk.add({ "<leader>f", group = "find" })
 
-wk.add({
-  { "<leader>f", group = "find" },
-  { "<leader>fb", desc = "[F]ind open [b]uffers" },
-  { "<leader>ff", desc = "[F]ind [f]iles" },
-  { "<leader>fh", desc = "[F]ind [h]elp" },
-  { "<leader>fs", desc = "[F]ile [s]earch - inside live grep" },
-})
 local telescope = require("telescope.builtin")
+local themes = require("telescope.themes")
 
-vim.keymap.set("n", "<Leader>ff", function()
-  require("telescope").extensions.frecency.frecency({
-    workspace = "CWD",
-    --@field path_display
-    --| "hidden"
-    --| "tail"
-    --| "absolute"
-    --| "smart"
-    --| "shorten"
-    --| "truncate"
-    path_display = { "smart" },
-    theme = "ivy",
-  })
-end, { desc = "[F]ind [f]iles" })
-
+vim.keymap.set("n", "<Leader>ff", function() telescope.find_files(themes.get_dropdown()) end, { desc = "[F]ind [f]iles" })
 vim.keymap.set("n", "<leader>fw", telescope.grep_string, { desc = "[F]ind [w]ord" })
 vim.keymap.set("n", "<leader>fs", telescope.live_grep, { desc = "[F]ile [s]earch - inside live grep" })
-vim.keymap.set("n", "<leader>fo", function() telescope.grep_string({ search = vim.fn.expand("<cword>") }) end, { desc = "[F]ile [s]earch - inside live grep" })
+vim.keymap.set(
+  "n",
+  "<leader>fo",
+  function() telescope.grep_string({ search = vim.fn.expand("<cword>") }) end,
+  { desc = "[F]ind [o]ccurence of word under cursor" }
+)
 vim.keymap.set("n", "<leader>fb", telescope.buffers, { desc = "[F]ind open [b]uffers" })
 vim.keymap.set("n", "<leader>fh", telescope.help_tags, { desc = "[F]ind [h]elp" })
 vim.keymap.set("n", "<leader><leader>", "<cmd>Telescope commands<cr>", { desc = "Toggle Commands Explorer" })
