@@ -31,11 +31,6 @@ vim.api.nvim_create_user_command("Git", function(opts)
   end
 end, {})
 
-vim.api.nvim_create_autocmd("User", {
-  pattern = "VeryLazy",
-  callback = function() require("config.keymaps") end,
-})
-
 require("lazy").setup("config.plugins", {
   change_detection = {
     -- automatically check for config file changes and reload the ui
@@ -49,3 +44,5 @@ require("lazy").setup("config.plugins", {
     title = "Lazy is crazy", ---@type string only works when border is not "none"
   },
 })
+
+require("telescope").load_extension("fzy_native")

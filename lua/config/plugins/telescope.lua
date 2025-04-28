@@ -2,18 +2,19 @@ return {
   {
     "nvim-telescope/telescope.nvim",
     version = "0.1.8",
-    dependencies = { "nvim-lua/plenary.nvim",
-      { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      { "nvim-telescope/telescope-fzy-native.nvim" },
       {
         "nvim-telescope/telescope-frecency.nvim",
-        opts = {                -- there's no need to run config now opts do it by itself
+        opts = { -- there's no need to run config now opts do it by itself
           db_safe_mode = false, -- this somehow removes pretyped A in search
-        }
+        },
       },
     },
     config = function()
-      local actions = require "telescope.actions"
-      require("telescope").setup {
+      local actions = require("telescope.actions")
+      require("telescope").setup({
         defaults = {
           sorting_strategy = "ascending",
           vimgrep_arguments = {
@@ -92,7 +93,7 @@ return {
             previewer = false,
           },
         },
-      }
+      })
     end,
-  }
+  },
 }

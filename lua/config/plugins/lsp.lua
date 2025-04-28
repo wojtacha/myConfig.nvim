@@ -612,13 +612,13 @@ return {
     opts = {
       -- Define your formatters
       formatters_by_ft = {
-        -- python = function(bufnr)
-        --   if require("conform").get_formatter_info("ruff_format", bufnr).available then
-        --     return { "ruff_format" }
-        --   else
-        --     return { "isort", "black" }
-        --   end
-        -- end,
+        python = function(bufnr)
+          if require("conform").get_formatter_info("ruff_format", bufnr).available then
+            return { "ruff_format", "ruff_fix" }
+          else
+            return { "isort", "black" }
+          end
+        end,
         lua = { "stylua" },
         typescript = { "prettierd", "prettier", stop_after_first = true },
         javascript = { "prettierd", "prettier", stop_after_first = true },
