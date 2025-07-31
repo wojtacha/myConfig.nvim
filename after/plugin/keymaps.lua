@@ -20,7 +20,10 @@ vim.keymap.set("n", "N", "Nzz", { desc = "Previous search occurence and focus vi
 -- Remap for dealing with word wrap
 vim.keymap.set("n", "k", "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
 vim.keymap.set("n", "j", "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
-vim.keymap.set("i", "kj", "<Esc>", { desc = "yet another esc", noremap = true })
+
+-- its time to say godbye
+-- vim.keymap.set("i", "kj", "<Esc>", { desc = "yet another esc", noremap = true })
+
 vim.keymap.set({ "n", "x" }, "x", [["_x]], { desc = "x command send char to black hole register", noremap = true })
 vim.keymap.set("x", "p", [["_dP]], { desc = "another paste command send char to black hole register", noremap = true })
 -- quickfix window mappings
