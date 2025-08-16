@@ -15,18 +15,11 @@ return {
 
       -- Provides on attach function to yamlls server
       { "imroc/kubeschema.nvim", opts = {} },
-      { "ms-jpq/coq_nvim", branch = "coq" },
-      { "ms-jpq/coq.artifacts", branch = "artifacts" },
       -- Allows extra capabilities provided by nvim-cmp
       -- "hrsh7th/cmp-nvim-lsp",
     },
 
-    init = function()
-      vim.g.coq_settings = {
-        auto_start = true, -- if you want to start COQ at startup
-        -- Your COQ settings here
-      }
-    end,
+    init = function() end,
 
     config = function()
       -- Brief aside: **What is LSP?**
@@ -194,9 +187,15 @@ return {
       --  When you add nvim-cmp, luasnip, etc. Neovim now has *more* capabilities.
       --  So, we create new capabilities with nvim cmp, and then broadcast that to the servers.
 
+      -- local capabilities = vim.lsp.protocol.make_client_capabilities()
       local capabilities = vim.lsp.protocol.make_client_capabilities()
+      capabilities = vim.tbl_deep_extend("force", capabilities, require("blink.cmp").get_lsp_capabilities({}, false))
+
       -- capabilities = vim.tbl_deep_extend("force", capabilities, require("cmp_nvim_lsp").default_capabilities())
-      capabilities.textDocument.completion.completionItem.snippetSupport = true
+      capabilities =
+        vim.tbl_deep_extend("force", capabilities, { textDocument = {
+          completion = { completionItem = { snippetSupport = true } },
+        } })
 
       -- Enable the following language servers
       --  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
@@ -397,8 +396,7 @@ return {
             -- by the server configuration above. Useful when disabling
             -- certain features of an LSP (for example, turning off formatting for ts_ls)
             server.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
-            local coq = require("coq") -- add this
-            require("lspconfig")[server_name].setup(coq.lsp_ensure_capabilities(server))
+            require("lspconfig")[server_name].setup({ capabilities = capabilities })
           end,
         },
       })
@@ -554,10 +552,6 @@ return {
     opts = {},
   },
 
-  {
-    "ray-x/lsp_signature.nvim", -- Show function signature when you type
-    event = "VeryLazy",
-  },
   {
     "simrat39/inlay-hints.nvim",
     config = function()

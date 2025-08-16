@@ -1,10 +1,6 @@
 return {
 
   {
-    "ray-x/lsp_signature.nvim", -- Show function signature when you type
-    event = "VeryLazy",
-  },
-  {
     "olimorris/codecompanion.nvim",
     dependencies = {
       "nvim-lua/plenary.nvim",
