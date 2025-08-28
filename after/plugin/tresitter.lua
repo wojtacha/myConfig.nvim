@@ -1,4 +1,4 @@
-require("nvim-treesitter.configs").setup {
+require("nvim-treesitter.configs").setup({
   ensure_installed = {
     "lua",
     "go",
@@ -31,7 +31,7 @@ require("nvim-treesitter.configs").setup {
   playground = {
     enable = true,
     disable = {},
-    updatetime = 25,         -- Debounced time for highlighting nodes in the playground from source code
+    updatetime = 25, -- Debounced time for highlighting nodes in the playground from source code
     persist_queries = false, -- Whether the query persists across vim sessions
     keybindings = {
       toggle_query_editor = "o",
@@ -50,8 +50,6 @@ require("nvim-treesitter.configs").setup {
 
   highlight = {
     enable = true,
-
-    disable = { "helm" },
     -- disable = function(lang, buf)
     --     local max_filesize = 100 * 1024 -- 100 KB
     --     local ok, stats = pcall(vim.loop., vim.api.nvim_buf_get_name(buf))
@@ -67,4 +65,4 @@ require("nvim-treesitter.configs").setup {
   -- Using this option may slow down your editor, and you may see some duplicate highlights.
   -- Instead of true it can also be a list of languages
   additional_vim_regex_highlighting = false,
-}
+})

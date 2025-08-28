@@ -14,10 +14,6 @@ end
 
 vim.opt.rtp:prepend(lazypath)
 
--- Highlight when yanking (copying) text
---  Try it with `yap` in normal mode
---  See `:help vim.highlight.on_yank()`
-
 vim.api.nvim_create_autocmd("TextYankPost", {
   desc = "Highlight when yanking (copying) text",
   group = vim.api.nvim_create_augroup("kickstart-highlight-yank", { clear = true }),
@@ -66,3 +62,6 @@ require("lazy").setup("config.plugins", {
 })
 
 require("telescope").load_extension("fzy_native")
+
+-- this is for helm-ls when it references values files from template (go to tmpl file gd into values and you got error)
+vim.treesitter.language.register("yaml.helm-values", "yaml")

@@ -14,6 +14,8 @@ return {
       { "j-hui/fidget.nvim", opts = {} },
 
       -- Provides on attach function to yamlls server
+
+      { "b0o/SchemaStore.nvim", lazy = true },
       { "imroc/kubeschema.nvim", opts = {} },
       -- Allows extra capabilities provided by nvim-cmp
       -- "hrsh7th/cmp-nvim-lsp",
@@ -252,16 +254,18 @@ return {
         -- },
 
         yamlls = {
-          on_attach = require("kubeschema").on_attach,
+          -- on_attach = require("kubeschema").on_attach,
           settings = {
             yaml = {
-              schemas = {
-                ["https://json.schemastore.org/github-workflow.json"] = "/.github/workflows/*",
-                ["http://json.schemastore.org/kustomization"] = "kustomization.{yml,yaml}",
-                ---@diagnostic disable-next-line
-                ["https://raw.githubusercontent.com/ansible/ansible-lint/main/src/ansiblelint/schemas/ansible.json#/$defs/playbook"] = "*play*.{yml,yaml}",
-                ["https://raw.githubusercontent.com/instrumenta/kubernetes-json-schema/master/v1.18.0-standalone-strict/all.json"] = "/*.k8s.yaml",
-              },
+              schemastore = { enable = false, url = "" },
+              schemas = require("schemastore").yaml.schemas(),
+              -- schemas = {
+              --   ["https://json.schemastore.org/github-workflow.json"] = "/.github/workflows/*",
+              --   ["http://json.schemastore.org/kustomization"] = "kustomization.{yml,yaml}",
+              --   ---@diagnostic disable-next-line
+              --   ["https://raw.githubusercontent.com/ansible/ansible-lint/main/src/ansiblelint/schemas/ansible.json#/$defs/playbook"] = "*play*.{yml,yaml}",
+              --   ["https://raw.githubusercontent.com/instrumenta/kubernetes-json-schema/master/v1.18.0-standalone-strict/all.json"] = "/*.k8s.yaml",
+              -- },
               format = {
                 enable = true,
               },
