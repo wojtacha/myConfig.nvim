@@ -44,17 +44,17 @@ local my_theme = {
 
 local space = {
   function() return " " end,
-  color = { bg = colors.black, fg = colors.blue },
+  -- color = { bg = colors.black, fg = colors.blue },
 }
 
 local filename = {
   "filename",
   -- color = { bg = colors.blue, fg = "#242735" },
-  color = { fg = "#242735" },
+  -- color = { fg = "#242735" },
   path = 1,
   separator = {
     -- left = "",
-    right = "",
+    -- right = "",
   },
 }
 
@@ -70,21 +70,21 @@ local modes = {
 
 local location = {
   "location",
-  color = { bg = colors.blacker, fg = colors.white },
-  separator = { left = "", right = "" },
+  -- color = { bg = colors.blacker, fg = colors.white },
+  -- separator = { left = "", right = "" },
 }
 
 local dia = {
   "diagnostics",
-  color = { bg = colors.dark, fg = colors.white },
-  separator = { left = "", right = "" },
+  -- color = { bg = colors.dark, fg = colors.white },
+  -- separator = { left = "", right = "" },
 }
 
 local options = {
   options = {
 
     icons_enabled = true,
-    theme = my_theme,
+    -- theme = my_theme,
     component_separators = { left = "", right = "" },
     section_separators = { left = "", right = "" },
     disabled_filetypes = {
@@ -109,7 +109,7 @@ local options = {
     lualine_x = {
       space,
       {
-        color = { fg = colors.yellow },
+        -- color = { fg = colors.yellow },
       },
     },
     lualine_y = {},
