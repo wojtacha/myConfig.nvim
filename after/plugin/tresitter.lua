@@ -4,8 +4,7 @@ require("nvim-treesitter.configs").setup({
     "go",
     "vim",
     "vimdoc",
-    "markdown_inline",
-    "markdown",
+    "helm",
     "json",
     "yaml",
     "bash",
@@ -66,3 +65,5 @@ require("nvim-treesitter.configs").setup({
   -- Instead of true it can also be a list of languages
   additional_vim_regex_highlighting = false,
 })
+
+vim.treesitter.language.register("yaml", "yaml.helm-values")
